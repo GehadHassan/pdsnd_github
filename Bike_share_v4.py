@@ -20,7 +20,7 @@ CITY_DATA = { 'chicago': 'chicago.csv',
               'new_york_city': 'new_york_city.csv',
               'washington': 'washington.csv' }
 cities = ['chicago', 'new_york_city', 'washington' ]
-months = ['all', 'January', 'February', 'March', 'April','May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+months = ['all', 'January', 'February', 'March', 'April','May', 'June']
 days = ['all', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saterday']
 
 def get_filters():
@@ -98,8 +98,7 @@ def raw_data(df):
             if ask == 'y': 
                 
                 ask2 = input('How many raws do you like to view?')
-                data = pd.read_csv(CITY_DATA[city])
-                view_data = data.head(int(ask2))
+                view_data = df.head(int(ask2))
                 print(view_data)
             
             elif ask == 'n':
