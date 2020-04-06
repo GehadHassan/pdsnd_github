@@ -69,18 +69,27 @@ def load_data(city, month, day):
     df['day'] = df['Start Time'].dt.day_name()
     df['hour'] = df['Start Time'].dt.hour
     
-    if (month == 'all' and day == 'all'):
-        print('Select all months and days')
-        df = df
-    elif (month == 'all' and day != 'all'):
-        print('Select all months and {0}'.format(day))
-        df = df[df['day'] == day]
-    elif (month != 'all' and day == 'all'):
-        print('Select {0} and all days'.format(month))
-        df = df[df['month'] == month]
-    else :
-        print('Select {0} and {1}'.format(month,day))
-        df = df[(df['month'] == month) & (df['day'] == day)]
+#    if (month == 'all' and day == 'all'):
+#        print('Select all months and days')
+#        df = df
+#    elif (month == 'all' and day != 'all'):
+#        print('Select all months and {0}'.format(day))
+#        df = df[df['day'] == day]
+#    elif (month != 'all' and day == 'all'):
+#        print('Select {0} and all days'.format(month))
+#        df = df[df['month'] == month]
+#    else :
+#        print('Select {0} and {1}'.format(month,day))
+#        df = df[(df['month'] == month) & (df['day'] == day)]
+    
+    if month!='all':
+        months=['January','February','March','April','May','June']
+        month = months.index(month)+1
+        df = df[df['month']==month]
+    
+    if day != 'all':
+        df = df[df['day_of_week'] == day.title()]
+        
     print('-'*50)   
     return df
 
@@ -112,22 +121,6 @@ def time_stats(df):
     start_time = time.time()
 
 
-#    # display raw data?
-#    while True:
-#        
-#            ask = input('Do you like to show raw data? y or n:').lower()
-#                   
-#            if ask == 'y': 
-#                
-#                ask2 = input('How many raws do you like to view?')
-#                data = pd.read_csv(CITY_DATA[city])
-#                view_data = data.head(int(ask2))
-#                print(view_data)
-#            
-#            elif ask == 'n':
-#                              
-#                break
-
     # display the most common month
     common_month = df['month'].mode()[0]
     print('common month is: {}' .format( common_month))
@@ -135,6 +128,7 @@ def time_stats(df):
     # display the most common day of week
     common_day_of_week = df['day'].mode()[0]
     print('common_day_of_week is: {}' .format(common_day_of_week))
+    
     # display the most common start hour
     
     common_hour = df['hour'].mode()[0]
@@ -193,17 +187,28 @@ def user_stats(df):
     counts_user_type = df['User Type'].value_counts()
     print('counts_user_type: {}' .format(counts_user_type))
     # Display counts of gender
-    gender_counts = df['Gender'].value_counts()
-    print('gender_counts: {}' .format( gender_counts))   
+    if city == 'washington':
+        print('No data available')
+    else:
+         gender_counts = df['Gender'].value_counts()
+         print('gender_counts: {}' .format( gender_counts)) 
+    
+     
     # Display earliest, most recent, and most common year of birth
-    earliest_yr = df['Birth Year'].min()
-    print('earliest_yr: {}' .format( earliest_yr)) 
     
-    recent_yr = df['Birth Year'].max()
-    print('recent_yr: {}' .format( recent_yr))
+    if city == 'washington':
+        print('No data available')
+    else:
     
-    common_yr = df['Birth Year'].value_counts().idxmax()
-    print('common_yr: {}' .format( common_yr))
+        earliest_yr = df['Birth Year'].min()
+        print('earliest_yr: {}' .format( earliest_yr)) 
+        
+        recent_yr = df['Birth Year'].max()
+        print('recent_yr: {}' .format( recent_yr))
+            
+        
+        common_yr = df['Birth Year'].value_counts().idxmax()
+        print('common_yr: {}' .format( common_yr))
 
     print("\nThis took %s seconds." % round((time.time() - start_time),2))
     print('-'*50)
